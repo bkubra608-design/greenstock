@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenStock AI — Smarter Inventory. Better Decisions.</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <img class="logo-img" src="https://img.magnific.com/free-vector/creative-data-logo-template_23-2149212798.jpg?semt=ais_hybrid&w=740&q=80" alt="GreenStock AI" />
+          <span class="logo-text">GreenStock <span class="logo-accent">AI</span></span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="products">
+          <span class="nav-icon">📦</span>
+          <span class="nav-label">Products</span>
+        </a>
+        <a href="#" class="nav-item" data-page="inventory">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Inventory</span>
+        </a>
+        <a href="#" class="nav-item" data-page="lowstock">
+          <span class="nav-icon">⚠️</span>
+          <span class="nav-label">Low Stock</span>
+          <span class="nav-badge" id="lowStockBadge">0</span>
+        </a>
+        <a href="#" class="nav-item" data-page="prediction">
+          <span class="nav-icon">🔮</span>
+          <span class="nav-label">Demand Prediction</span>
+        </a>
+        <a href="#" class="nav-item" data-page="activity">
+          <span class="nav-icon">🕒</span>
+          <span class="nav-label">Activity</span>
+        </a>
+        <a href="#" class="nav-item" data-page="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="ai-assistant-card">
+          <img class="ai-assistant-logo" src="https://img.magnific.com/free-vector/creative-data-logo-template_23-2149212798.jpg?semt=ais_hybrid&w=740&q=80" alt="GreenStock AI" />
+          <button class="btn-ask-ai" id="askAiBtn">Ask GreenStock AI</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==================== OVERLAY ==================== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <div class="main-content">
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" id="hamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="topbar-title" id="topbarTitle">Inventory Dashboard</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <span class="theme-icon-light">☀️</span>
+            <span class="theme-icon-dark">🌙</span>
+          </button>
+          <div class="topbar-user">
+            <div class="user-avatar">A</div>
+            <span class="user-name">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ==================== DASHBOARD PAGE ==================== -->
+      <section class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <h1 class="page-heading">Inventory Dashboard</h1>
+            <p class="page-subheading">Monitor your stock and make smarter inventory decisions.</p>
+          </div>
+          <div class="quick-actions">
+            <button class="btn btn-primary" onclick="openProductModal()">+ Add Product</button>
+            <button class="btn btn-secondary" onclick="navigateTo('inventory')">Update Stock</button>
+            <button class="btn btn-secondary" onclick="navigateTo('lowstock')">View Low Stock</button>
+            <button class="btn btn-secondary" onclick="navigateTo('prediction')">Run Demand Prediction</button>
+            <button class="btn btn-secondary" onclick="navigateTo('activity')">View Activity</button>
+          </div>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="stats-grid">
+          <div class="stat-card fade-in">
+            <div class="stat-body">
+              <div class="stat-value" id="statTotalProducts">0</div>
+              <div class="stat-label">Total Products</div>
+            </div>
+          </div>
+          <div class="stat-card fade-in">
+            <div class="stat-body">
+              <div class="stat-value" id="statCurrentStock">0</div>
+              <div class="stat-label">Units in Stock</div>
+            </div>
+          </div>
+          <div class="stat-card stat-card-warning fade-in">
+            <div class="stat-body">
+              <div class="stat-value" id="statLowStock">0</div>
+              <div class="stat-label">Low Stock Products</div>
+            </div>
+          </div>
+          <div class="stat-card stat-card-danger fade-in">
+            <div class="stat-body">
+              <div class="stat-value" id="statOutStock">0</div>
+              <div class="stat-label">Out of Stock Products</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVENTORY VALUE + HEALTH -->
+        <div class="dashboard-row">
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3 class="card-title">Inventory Overview</h3>
+              <div class="chart-toggles">
+                <button class="chart-toggle active" data-range="7">7 Days</button>
+                <button class="chart-toggle" data-range="30">30 Days</button>
+                <button class="chart-toggle" data-range="90">90 Days</button>
+              </div>
+            </div>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot dot-stock-in"></span> Stock In</span>
+              <span class="legend-item"><span class="legend-dot dot-stock-out"></span> Stock Out</span>
+              <span class="legend-item"><span class="legend-dot dot-current"></span> Current Stock</span>
+            </div>
+            <canvas id="overviewChart" width="800" height="320"></canvas>
+          </div>
+
+          <div class="card health-card">
+            <h3 class="card-title">Inventory Health</h3>
+            <div class="health-score-wrap">
+              <canvas id="healthChart" width="200" height="200"></canvas>
+              <div class="health-score-label">
+                <span class="health-score-value" id="healthScore">0</span>
+                <span class="health-score-total">/ 100</span>
+              </div>
+            </div>
+            <div class="health-breakdown" id="healthBreakdown"></div>
+          </div>
+        </div>
+
+        <!-- INVENTORY VALUE + CATEGORY -->
+        <div class="dashboard-row">
+          <div class="card value-card">
+            <h3 class="card-title">Total Inventory Value</h3>
+            <div class="inventory-value" id="inventoryValue">$0</div>
+            <p class="card-subtitle">Product Price × Current Stock across all products</p>
+          </div>
+
+          <div class="card category-card">
+            <h3 class="card-title">Inventory by Category</h3>
+            <div class="category-chart-wrap">
+              <canvas id="categoryChart" width="220" height="220"></canvas>
+            </div>
+            <div class="category-legend" id="categoryLegend"></div>
+          </div>
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+        <div class="card activity-card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Activity</h3>
+            <button class="btn btn-ghost" onclick="navigateTo('activity')">View All</button>
+          </div>
+          <div class="activity-list" id="recentActivity"></div>
+        </div>
+      </section>
+
+      <!-- ==================== PRODUCTS PAGE ==================== -->
+      <section class="page" id="page-products">
+        <div class="page-header">
+          <div>
+            <h1 class="page-heading">Product Management</h1>
+            <p class="page-subheading">Add, edit, and manage your product catalog.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openProductModal()">+ Add Product</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="productSearch" placeholder="Search products..." />
+          </div>
+          <select class="filter-select" id="filterCategory">
+            <option value="all">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Food">Food</option>
+            <option value="Office Supplies">Office Supplies</option>
+          </select>
+          <select class="filter-select" id="filterStatus">
+            <option value="all">All Status</option>
+            <option value="in">In Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+          <select class="filter-select" id="sortBy">
+            <option value="name-asc">Name A-Z</option>
+            <option value="name-desc">Name Z-A</option>
+            <option value="stock-desc">Highest Stock</option>
+            <option value="stock-asc">Lowest Stock</option>
+            <option value="price-desc">Highest Price</option>
+            <option value="price-asc">Lowest Price</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table" id="productTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Current Stock</th>
+                <th>Minimum Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productTableBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="productsEmpty" style="display:none;">
+          <div class="empty-icon">📦</div>
+          <p>No products found. Try adjusting your search or filters.</p>
+        </div>
+      </section>
+
+      <!-- ==================== INVENTORY PAGE ==================== -->
+      <section class="page" id="page-inventory">
+        <div class="page-header">
+          <div>
+            <h1 class="page-heading">Inventory Management</h1>
+            <p class="page-subheading">Adjust stock levels for your products.</p>
+          </div>
+        </div>
+        <div class="inventory-grid" id="inventoryGrid"></div>
+        <div class="empty-state" id="inventoryEmpty" style="display:none;">
+          <div class="empty-icon">📋</div>
+          <p>No products in inventory.</p>
+        </div>
+      </section>
+
+      <!-- ==================== LOW STOCK PAGE ==================== -->
+      <section class="page" id="page-lowstock">
+        <div class="page-header">
+          <div>
+            <h1 class="page-heading">Low Stock Alerts</h1>
+            <p class="page-subheading">Products that need attention before they run out.</p>
+          </div>
+        </div>
+        <div class="alerts-grid" id="alertsGrid"></div>
+        <div class="empty-state" id="alertsEmpty" style="display:none;">
+          <div class="empty-icon">✅</div>
+          <p>All products are well stocked. No alerts at this time.</p>
+        </div>
+      </section>
+
+      <!-- ==================== DEMAND PREDICTION PAGE ==================== -->
+      <section class="page" id="page-prediction">
+        <div class="page-header">
+          <div>
+            <h1 class="page-heading">AI Demand Prediction</h1>
+            <p class="page-subheading">Predict future demand and avoid stock shortages.</p>
+          </div>
+          <button class="btn btn-primary" onclick="runPrediction()">🔮 Run Prediction</button>
+        </div>
+
+        <div class="ai-banner">
+          <div class="ai-banner-icon">🤖</div>
+          <div>
+            <div class="ai-banner-title">AI-Powered Demo Prediction</div>
+            <div class="ai-banner-desc">This uses a weighted-average algorithm on historical sales data. A real ML model or n8n AI agent can be connected later.</div>
+          </div>
+        </div>
+
+        <div class="prediction-grid" id="predictionGrid"></div>
+      </section>
+
+      <!-- ==================== ACTIVITY PAGE ==================== -->
+      <section class="page" id="page-activity">
+        <div class="page-header">
+          <div>
+            <h1 class="page-heading">Activity Log</h1>
+            <p class="page-subheading">Complete history of inventory actions.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="clearActivity()">Clear Log</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="activityTable">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="activityTableBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="activityEmpty" style="display:none;">
+          <div class="empty-icon">🕒</div>
+          <p>No activity recorded yet.</p>
+        </div>
+      </section>
+
+      <!-- ==================== SETTINGS PAGE ==================== -->
+      <section class="page" id="page-settings">
+        <div class="page-header">
+          <div>
+            <h1 class="page-heading">Settings</h1>
+            <p class="page-subheading">Configure your inventory preferences.</p>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <div class="card setting-card">
+            <h3 class="card-title">Low Stock Threshold</h3>
+            <p class="card-subtitle">Default minimum stock level for new products.</p>
+            <div class="setting-input-row">
+              <input type="number" class="setting-input" id="settingMinStock" min="0" value="10" />
+              <button class="btn btn-primary" onclick="saveSettings()">Save</button>
+            </div>
+          </div>
+
+          <div class="card setting-card">
+            <h3 class="card-title">Currency</h3>
+            <p class="card-subtitle">Display currency for inventory values.</p>
+            <div class="setting-input-row">
+              <select class="filter-select" id="settingCurrency">
+                <option value="USD">USD — US Dollar</option>
+                <option value="PKR">PKR — Pakistani Rupee</option>
+                <option value="EUR">EUR — Euro</option>
+                <option value="GBP">GBP — British Pound</option>
+              </select>
+              <button class="btn btn-primary" onclick="saveSettings()">Save</button>
+            </div>
+          </div>
+
+          <div class="card setting-card">
+            <h3 class="card-title">Appearance</h3>
+            <p class="card-subtitle">Toggle between light and dark mode.</p>
+            <div class="setting-input-row">
+              <button class="btn btn-secondary theme-btn" onclick="toggleDarkMode()" id="settingThemeBtn">🌙 Dark Mode</button>
+            </div>
+          </div>
+
+          <div class="card setting-card">
+            <h3 class="card-title">Data Management</h3>
+            <p class="card-subtitle">Reset all data to default demo products.</p>
+            <div class="setting-input-row">
+              <button class="btn btn-danger" onclick="resetData()">Reset Demo Data</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card disclaimer-card">
+          <h3 class="card-title">🔐 Data Safety Notice</h3>
+          <ul class="disclaimer-list">
+            <li>localStorage is used for demo persistence — data is stored in your browser only.</li>
+            <li>There is no real authentication or user accounts.</li>
+            <li>Demand prediction is a demo algorithm, not a trained machine-learning model.</li>
+            <li>No real inventory database is connected.</li>
+            <li>No real AI model is used unless configured via an external API.</li>
+            <li>Production use would require a secure backend, database, and authentication system.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== PRODUCT MODAL ==================== -->
+    <div class="modal-overlay" id="productModalOverlay">
+      <div class="modal" id="productModal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="productModalTitle">Add Product</h2>
+          <button class="modal-close" onclick="closeProductModal()">✕</button>
+        </div>
+        <form class="modal-body" id="productForm" onsubmit="return submitProduct(event)">
+          <input type="hidden" id="productId" />
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Product Name *</label>
+              <input type="text" class="form-input" id="productName" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">SKU *</label>
+              <input type="text" class="form-input" id="productSku" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-input" id="productCategory" required>
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Food">Food</option>
+                <option value="Office Supplies">Office Supplies</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price *</label>
+              <input type="number" class="form-input" id="productPrice" min="0" step="0.01" required />
+            </div>
+            <div class="form-group" id="initialStockGroup">
+              <label class="form-label">Initial Stock *</label>
+              <input type="number" class="form-input" id="productStock" min="0" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Minimum Stock Level *</label>
+              <input type="number" class="form-input" id="productMinStock" min="0" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Supplier</label>
+              <input type="text" class="form-input" id="productSupplier" />
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Product Description</label>
+              <textarea class="form-input" id="productDescription" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" onclick="closeProductModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="productSubmitBtn">Add Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== DELETE MODAL ==================== -->
+    <div class="modal-overlay" id="deleteModalOverlay">
+      <div class="modal modal-small">
+        <div class="modal-header">
+          <h2 class="modal-title">Delete Product?</h2>
+          <button class="modal-close" onclick="closeDeleteModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="delete-confirm-text" id="deleteConfirmText">Are you sure you want to remove this product from your inventory?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+          <button class="btn btn-danger" onclick="confirmDelete()">Delete Product</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PRODUCT DETAILS MODAL ==================== -->
+    <div class="modal-overlay" id="detailsModalOverlay">
+      <div class="modal modal-large">
+        <div class="modal-header">
+          <h2 class="modal-title">Product Details</h2>
+          <button class="modal-close" onclick="closeDetailsModal()">✕</button>
+        </div>
+        <div class="modal-body" id="detailsModalBody"></div>
+      </div>
+    </div>
+
+    <!-- ==================== AI ASSISTANT DRAWER ==================== -->
+    <div class="ai-drawer" id="aiDrawer">
+      <div class="ai-drawer-header">
+        <div class="ai-drawer-title">
+          <img class="ai-drawer-logo" src="https://img.magnific.com/free-vector/creative-data-logo-template_23-2149212798.jpg?semt=ais_hybrid&w=740&q=80" alt="GreenStock AI" />
+          <span>GreenStock AI</span>
+        </div>
+        <button class="ai-drawer-close" id="aiDrawerClose">✕</button>
+      </div>
+      <div class="ai-chat-body" id="aiChatBody">
+        <div class="ai-msg ai-msg-bot">
+          <div class="ai-msg-content">Hi! I'm GreenStock AI. Ask me about your inventory — low stock, reorder recommendations, demand predictions, and more.</div>
+        </div>
+      </div>
+      <div class="ai-suggestions" id="aiSuggestions">
+        <button class="ai-suggestion" onclick="askAI('Which products are low in stock?')">Which products are low in stock?</button>
+        <button class="ai-suggestion" onclick="askAI('What should I reorder?')">What should I reorder?</button>
+        <button class="ai-suggestion" onclick="askAI('Show me out-of-stock products.')">Show me out-of-stock products.</button>
+        <button class="ai-suggestion" onclick="askAI('What is my total inventory value?')">What is my total inventory value?</button>
+        <button class="ai-suggestion" onclick="askAI('Which products have the highest demand?')">Which products have the highest demand?</button>
+        <button class="ai-suggestion" onclick="askAI('Which products need attention?')">Which products need attention?</button>
+      </div>
+      <div class="ai-chat-input-wrap">
+        <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask GreenStock AI..." />
+        <button class="ai-chat-send" id="aiChatSend">➤</button>
+      </div>
+    </div>
+
+    <!-- ==================== TOAST CONTAINER ==================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
