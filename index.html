@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GreenStock AI — Smarter Inventory. Better Decisions.</title>
+    <title>GreenMarket — Smarter Inventory. Better Decisions.</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,48 +14,48 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
-          <img class="logo-img" src="https://img.magnific.com/free-vector/creative-data-logo-template_23-2149212798.jpg?semt=ais_hybrid&w=740&q=80" alt="GreenStock AI" />
-          <span class="logo-text">GreenStock <span class="logo-accent">AI</span></span>
+          <img class="logo-img" src="greenmarket-logo.svg" alt="GreenMarket" />
+          <span class="logo-text">GreenMarket</span>
         </div>
         <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
       </div>
 
       <nav class="sidebar-nav">
         <a href="#" class="nav-item active" data-page="dashboard">
-          <span class="nav-icon">📊</span>
+          <span class="nav-icon"></span>
           <span class="nav-label">Dashboard</span>
         </a>
         <a href="#" class="nav-item" data-page="products">
-          <span class="nav-icon">📦</span>
+          <span class="nav-icon"></span>
           <span class="nav-label">Products</span>
         </a>
         <a href="#" class="nav-item" data-page="inventory">
-          <span class="nav-icon">📋</span>
+          <span class="nav-icon"></span>
           <span class="nav-label">Inventory</span>
         </a>
         <a href="#" class="nav-item" data-page="lowstock">
-          <span class="nav-icon">⚠️</span>
+          <span class="nav-icon"></span>
           <span class="nav-label">Low Stock</span>
           <span class="nav-badge" id="lowStockBadge">0</span>
         </a>
         <a href="#" class="nav-item" data-page="prediction">
-          <span class="nav-icon">🔮</span>
+          <span class="nav-icon"></span>
           <span class="nav-label">Demand Prediction</span>
         </a>
         <a href="#" class="nav-item" data-page="activity">
-          <span class="nav-icon">🕒</span>
+          <span class="nav-icon"></span>
           <span class="nav-label">Activity</span>
         </a>
         <a href="#" class="nav-item" data-page="settings">
-          <span class="nav-icon">⚙️</span>
+          <span class="nav-icon"></span>
           <span class="nav-label">Settings</span>
         </a>
       </nav>
 
       <div class="sidebar-footer">
         <div class="ai-assistant-card">
-          <img class="ai-assistant-logo" src="https://img.magnific.com/free-vector/creative-data-logo-template_23-2149212798.jpg?semt=ais_hybrid&w=740&q=80" alt="GreenStock AI" />
-          <button class="btn-ask-ai" id="askAiBtn">Ask GreenStock AI</button>
+          <img class="ai-assistant-logo" src="greenmarket-logo.svg" alt="GreenMarket" />
+          <button class="btn-ask-ai" id="askAiBtn">Ask GreenMarket AI</button>
         </div>
       </div>
     </aside>
@@ -245,7 +245,7 @@
           </table>
         </div>
         <div class="empty-state" id="productsEmpty" style="display:none;">
-          <div class="empty-icon">📦</div>
+          <div class="empty-icon"></div>
           <p>No products found. Try adjusting your search or filters.</p>
         </div>
       </section>
@@ -260,7 +260,7 @@
         </div>
         <div class="inventory-grid" id="inventoryGrid"></div>
         <div class="empty-state" id="inventoryEmpty" style="display:none;">
-          <div class="empty-icon">📋</div>
+          <div class="empty-icon"></div>
           <p>No products in inventory.</p>
         </div>
       </section>
@@ -275,7 +275,7 @@
         </div>
         <div class="alerts-grid" id="alertsGrid"></div>
         <div class="empty-state" id="alertsEmpty" style="display:none;">
-          <div class="empty-icon">✅</div>
+          <div class="empty-icon"></div>
           <p>All products are well stocked. No alerts at this time.</p>
         </div>
       </section>
@@ -287,11 +287,11 @@
             <h1 class="page-heading">AI Demand Prediction</h1>
             <p class="page-subheading">Predict future demand and avoid stock shortages.</p>
           </div>
-          <button class="btn btn-primary" onclick="runPrediction()">🔮 Run Prediction</button>
+          <button class="btn btn-primary" onclick="runPrediction()">Run Prediction</button>
         </div>
 
         <div class="ai-banner">
-          <div class="ai-banner-icon">🤖</div>
+          <div class="ai-banner-icon"></div>
           <div>
             <div class="ai-banner-title">AI-Powered Demo Prediction</div>
             <div class="ai-banner-desc">This uses a weighted-average algorithm on historical sales data. A real ML model or n8n AI agent can be connected later.</div>
@@ -325,7 +325,7 @@
           </table>
         </div>
         <div class="empty-state" id="activityEmpty" style="display:none;">
-          <div class="empty-icon">🕒</div>
+          <div class="empty-icon"></div>
           <p>No activity recorded yet.</p>
         </div>
       </section>
@@ -483,14 +483,14 @@
     <div class="ai-drawer" id="aiDrawer">
       <div class="ai-drawer-header">
         <div class="ai-drawer-title">
-          <img class="ai-drawer-logo" src="https://img.magnific.com/free-vector/creative-data-logo-template_23-2149212798.jpg?semt=ais_hybrid&w=740&q=80" alt="GreenStock AI" />
-          <span>GreenStock AI</span>
+          <img class="ai-drawer-logo" src="greenmarket-logo.svg" alt="GreenMarket" />
+          <span>GreenMarket</span>
         </div>
         <button class="ai-drawer-close" id="aiDrawerClose">✕</button>
       </div>
       <div class="ai-chat-body" id="aiChatBody">
         <div class="ai-msg ai-msg-bot">
-          <div class="ai-msg-content">Hi! I'm GreenStock AI. Ask me about your inventory — low stock, reorder recommendations, demand predictions, and more.</div>
+          <div class="ai-msg-content">Hi! I'm GreenMarket AI. Ask me about your inventory — low stock, reorder recommendations, demand predictions, and more.</div>
         </div>
       </div>
       <div class="ai-suggestions" id="aiSuggestions">
@@ -502,7 +502,7 @@
         <button class="ai-suggestion" onclick="askAI('Which products need attention?')">Which products need attention?</button>
       </div>
       <div class="ai-chat-input-wrap">
-        <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask GreenStock AI..." />
+        <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask GreenMarket AI..." />
         <button class="ai-chat-send" id="aiChatSend">➤</button>
       </div>
     </div>
@@ -513,3 +513,48 @@
     <script src="script.js"></script>
   </body>
 </html>
+
+        
+         
+        
+          
+         
+            
+            
+          
+            
+
+        
+
+      
+     
+      
+         
+               
+      
+          
+
+          
+        
+              
+          
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
